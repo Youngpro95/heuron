@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
+import Task3 from '../components/Task3/_components/Task3';
 
 function Task3Page() {
-  return <div>Task3Page</div>;
+  return <Task3 />;
 }
 
 export default Task3Page;
