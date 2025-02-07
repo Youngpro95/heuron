@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 import MainPage from './pages/MainPage';
 import Task3Page from './pages/Task3Page';
+import Task2Page from './pages/Task2Page';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
         <Routes>
           <Route path='/' element={<MainPage />} />
           {/* <Route path="/task1" element={<Task1Page />} /> */}
-          {/* <Route path='/task2' element={<Task2Page />} /> */}
+          <Route path='/task2' element={<Task2Page />} />
           <Route path='/task3' element={<Task3Page />} />
         </Routes>
       </div>

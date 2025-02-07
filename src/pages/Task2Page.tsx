@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
+import Task2 from '../components/Task2/_components/Task2';
 
 function Task2Page() {
-  return <div>Task2Page</div>;
+  return <Task2 />;
 }
 
 export default Task2Page;
