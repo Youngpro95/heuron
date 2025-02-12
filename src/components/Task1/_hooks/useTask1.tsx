@@ -181,7 +181,6 @@ export const useTask1 = (): UseTask1Result => {
     }
   }, []);
 
-  // Effects
   useEffect(() => {
     fetchImage();
   }, [fetchImage]);

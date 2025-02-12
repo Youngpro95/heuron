@@ -1,50 +1,40 @@
-<<<<<<< HEAD
-# Getting Started with Create React App
+## 프로젝트 구조
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```
+- src/components: 공통 컴포넌트
+- src/hooks: 커스텀 훅
+- src/pages: 페이지
+```
 
-## Available Scripts
+## 주요 기능
 
-In the project directory, you can run:
+1. 과제 1
 
-### `yarn start`
+   - 이미지 확대/축소 (마우스 드래그)
+   - 이미지 회전 (우클릭 드래그)
+   - 그레이스케일 모드
+   - 초기화 기능
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+2. 과제 2
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+   - 플레이어 수 설정
+   - 카드 수 설정
+   - 게임 진행 및 결과 확인
 
-### `yarn test`
+3. 과제 3
+   - 모음/자음 분리 기능
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 기술 스택
 
-### `yarn build`
+- React
+- TypeScript
+- React Router
+- Tailwind CSS
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 실행 방법
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-=======
-# heuron
->>>>>>> 0a5abaa69333d16dc4190e2f631eb62c4767aa22
+1. 프로젝트 클론
+2. git clone https://github.com/Youngpro95/heuron.git
+3. cd heuron-frontend
+4. yarn install
+5. yarn start
