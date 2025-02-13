@@ -21,7 +21,6 @@ interface UseTask1Result {
   handleMouseUp: () => void;
   retryFetch: () => void;
   resetTransform: () => void;
-  isDragging: boolean;
 }
 
 export const useTask1 = (): UseTask1Result => {
@@ -48,6 +47,7 @@ export const useTask1 = (): UseTask1Result => {
       if (!ctx) return;
 
       const canvas = canvasRef.current;
+      canvas.classList.add('grabbing');
       canvas.width = 800;
       canvas.height = 600;
 
@@ -119,6 +119,12 @@ export const useTask1 = (): UseTask1Result => {
 
   const handleGlobalMouseUp = useCallback(() => {
     isDraggingRef.current = false;
+
+    // 드래그 끝날 때 grabbing 클래스 제거
+    if (canvasRef.current) {
+      canvasRef.current.classList.remove('grabbing');
+    }
+
     window.removeEventListener('mousemove', handleGlobalMouseMove);
     window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, [handleGlobalMouseMove]);
@@ -128,12 +134,21 @@ export const useTask1 = (): UseTask1Result => {
       if (!canvasRef.current) return;
 
       const rect = canvasRef.current.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+
+      const currentScale = scaleRef.current;
+      const lastCenter = lastZoomCenterRef.current;
+
+      const x = (mouseX - lastCenter.x) / currentScale + lastCenter.x;
+      const y = (mouseY - lastCenter.y) / currentScale + lastCenter.y;
 
       isDraggingRef.current = true;
       startPosRef.current = { x: e.clientX, y: e.clientY };
       centerPointRef.current = { x, y };
+
+      // 드래그 시작할 때 grabbing 클래스 추가
+      canvasRef.current.classList.add('grabbing');
 
       window.addEventListener('mousemove', handleGlobalMouseMove);
       window.addEventListener('mouseup', handleGlobalMouseUp);
@@ -211,6 +226,5 @@ export const useTask1 = (): UseTask1Result => {
     handleMouseUp: handleGlobalMouseUp,
     retryFetch: fetchImage,
     resetTransform,
-    isDragging: isDraggingRef.current,
   };
 };

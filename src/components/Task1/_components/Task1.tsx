@@ -12,7 +12,6 @@ function Task1() {
     handleMouseUp,
     retryFetch,
     resetTransform,
-    isDragging,
   } = useTask1();
 
   const { isGrayscale, toggleGrayscale } = useImageContext();
@@ -67,9 +66,7 @@ function Task1() {
 
           <canvas
             ref={canvasRef}
-            className={`w-full h-full object-contain ${
-              isDragging ? 'cursor-grabbing' : 'cursor-grab'
-            }`}
+            className='w-full h-full object-contain cursor-grab'
             style={{
               imageRendering: 'crisp-edges',
               touchAction: 'none',
