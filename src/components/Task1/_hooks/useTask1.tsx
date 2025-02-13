@@ -54,10 +54,12 @@ export const useTask1 = (): UseTask1Result => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
 
-      // 회전은 항상 중앙 기준
-      ctx.translate(400, 300);
-      ctx.rotate((rotationRef.current * Math.PI) / 180);
-      ctx.translate(-400, -300);
+      // 회전이 있을 때만 회전 변환 적용
+      if (rotationRef.current !== 0) {
+        ctx.translate(400, 300);
+        ctx.rotate((rotationRef.current * Math.PI) / 180);
+        ctx.translate(-400, -300);
+      }
 
       // scale이 1보다 작으면 중앙 기준, 크면 마우스 위치 기준
       const center = scaleRef.current <= 1 ? { x: 400, y: 300 } : lastZoomCenterRef.current;
@@ -137,17 +139,34 @@ export const useTask1 = (): UseTask1Result => {
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
 
+      let x = mouseX;
+      let y = mouseY;
+
+      // 회전이 있을 때만 회전 변환 계산
+      // https://end-of-code.tistory.com/33 참고
+      if (rotationRef.current !== 0) {
+        const translatedX = mouseX - 400;
+        const translatedY = mouseY - 300;
+
+        const angle = (rotationRef.current * Math.PI) / 180;
+        const rotatedX = translatedX * Math.cos(-angle) - translatedY * Math.sin(-angle);
+        const rotatedY = translatedX * Math.sin(-angle) + translatedY * Math.cos(-angle);
+
+        x = rotatedX + 400;
+        y = rotatedY + 300;
+      }
+
+      // scale 고려한 좌표 계산
       const currentScale = scaleRef.current;
       const lastCenter = lastZoomCenterRef.current;
 
-      const x = (mouseX - lastCenter.x) / currentScale + lastCenter.x;
-      const y = (mouseY - lastCenter.y) / currentScale + lastCenter.y;
+      x = (x - lastCenter.x) / currentScale + lastCenter.x;
+      y = (y - lastCenter.y) / currentScale + lastCenter.y;
 
       isDraggingRef.current = true;
       startPosRef.current = { x: e.clientX, y: e.clientY };
       centerPointRef.current = { x, y };
 
-      // 드래그 시작할 때 grabbing 클래스 추가
       canvasRef.current.classList.add('grabbing');
 
       window.addEventListener('mousemove', handleGlobalMouseMove);

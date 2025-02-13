@@ -48,7 +48,7 @@ function Task1() {
           초기화
         </button>
       </div>
-
+      {/* 드래그 영역을 넓히기위하여 canvas보다 넓게 잡았습니다 */}
       <div
         className='w-full min-h-[600px] flex justify-center items-center '
         onMouseDown={handleMouseDown}
