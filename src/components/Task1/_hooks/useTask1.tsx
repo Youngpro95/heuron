@@ -29,7 +29,6 @@ export const useTask1 = (): UseTask1Result => {
   const [image, setImage] = useState<Image | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const isDraggingRef = useRef(false);
@@ -90,27 +89,26 @@ export const useTask1 = (): UseTask1Result => {
     (e: MouseEvent) => {
       if (!isDraggingRef.current || !image) return;
 
-      const dragXpoint = e.clientX - startPosRef.current.x;
+      const dx = e.clientX - startPosRef.current.x;
 
       if (e.buttons === 1) {
-        if (dragXpoint < 0) {
-          // 왼쪽으로 드래그: 축소
-          const newScale = scaleRef.current - Math.abs(dragXpoint) * 0.003;
-          scaleRef.current = Math.max(0.7, newScale);
-          // scale이 1 이하가 되면 중심점을 중앙으로
-          if (scaleRef.current <= 1) {
-            lastZoomCenterRef.current = { x: 400, y: 300 };
-          }
-        } else {
+        if (dx > 0) {
           // 오른쪽으로 드래그: 확대
-          scaleRef.current += dragXpoint * 0.005;
+          scaleRef.current += dx * 0.005;
+          // 확대할 때만 새로운 중심점 설정
           lastZoomCenterRef.current = centerPointRef.current;
+        } else {
+          // 왼쪽으로 드래그: 축소
+          const newScale = scaleRef.current - Math.abs(dx) * 0.005;
+          scaleRef.current = Math.max(0.7, newScale);
+          // 축소할 때는 마지막 확대 지점 유지
         }
       } else if (e.buttons === 2) {
-        rotationRef.current += dragXpoint * 0.3;
+        rotationRef.current += dx * 0.5;
       }
 
       const img = new Image();
+      img.crossOrigin = 'anonymous';
       img.onload = () => drawImage(img);
       img.src = image.download_url;
 
@@ -121,7 +119,6 @@ export const useTask1 = (): UseTask1Result => {
 
   const handleGlobalMouseUp = useCallback(() => {
     isDraggingRef.current = false;
-    setIsDragging(false);
     window.removeEventListener('mousemove', handleGlobalMouseMove);
     window.removeEventListener('mouseup', handleGlobalMouseUp);
   }, [handleGlobalMouseMove]);
@@ -135,7 +132,6 @@ export const useTask1 = (): UseTask1Result => {
       const y = e.clientY - rect.top;
 
       isDraggingRef.current = true;
-      setIsDragging(true);
       startPosRef.current = { x: e.clientX, y: e.clientY };
       centerPointRef.current = { x, y };
 
@@ -153,13 +149,14 @@ export const useTask1 = (): UseTask1Result => {
   }, [handleGlobalMouseMove]);
 
   const resetTransform = useCallback(() => {
-    scaleRef.current = 0.9;
+    scaleRef.current = 1;
     rotationRef.current = 0;
     centerPointRef.current = { x: 400, y: 300 };
     lastZoomCenterRef.current = { x: 400, y: 300 };
 
     if (image) {
       const img = new Image();
+      img.crossOrigin = 'anonymous'; // grayScale 처리 위해 필요
       img.onload = () => drawImage(img);
       img.src = image.download_url;
     }
@@ -189,6 +186,7 @@ export const useTask1 = (): UseTask1Result => {
     if (!image) return;
 
     const img = new Image();
+    img.crossOrigin = 'anonymous'; // grayScale 처리 위해 필요
     img.onload = () => {
       try {
         drawImage(img);
@@ -213,6 +211,6 @@ export const useTask1 = (): UseTask1Result => {
     handleMouseUp: handleGlobalMouseUp,
     retryFetch: fetchImage,
     resetTransform,
-    isDragging,
+    isDragging: isDraggingRef.current,
   };
 };
